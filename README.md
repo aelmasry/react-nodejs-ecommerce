@@ -1,12 +1,16 @@
-## React NodeJS Ecommerce tutorial implementation
+## implementation E-Commerce project by React NodeJS MongoDB (MERN stack)
+
+#M = MongoDB
+#E = ExpressJS
+#R = ReactJS
+#N = NodeJS
 
 
-
-# Project setup
+## Project setup
 
 npm install
 
 
-# Run
+## Run
 
 npm start
