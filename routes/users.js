@@ -1,10 +1,12 @@
 module.exports = app => {
     const UsersController = require('../controllers/UsersController')
 
+    const { signUpValidation, validate } = require('../validation/user.js')
+
     let router = require("express").Router();
 
     // User signup
-    router.post("/signup", UsersController.signUp);
+    router.post("/signup", signUpValidation(), validate, UsersController.signUp);
 
     // User signIn
     router.post("/signin", UsersController.signIn);
@@ -13,19 +15,19 @@ module.exports = app => {
     router.get("/logout", UsersController.logout);
 
     // User Create
-    router.post("/", UsersController.store);
+    // router.post("/", UsersController.store);
 
-    // Retrieve all UsersController
-    router.get("/", UsersController.findAll);
+    // // Retrieve all UsersController
+    // router.get("/", UsersController.findAll);
 
-    // Retrieve a single Tutorial with id
-    router.get("/:id", UsersController.findOne);
+    // // Retrieve a single Tutorial with id
+    // router.get("/:id", UsersController.findOne);
 
-    // Update a Tutorial with id
-    router.put("/:id", UsersController.update);
+    // // Update a Tutorial with id
+    // router.put("/:id", UsersController.update);
 
-    // Delete a Tutorial with id
-    router.delete("/:id", UsersController.delete);
+    // // Delete a Tutorial with id
+    // router.delete("/:id", UsersController.delete);
     
     app.use('/users', router);
 }

@@ -1,9 +1,8 @@
 //FILENAME : User.js
 
 const mongoose = require("mongoose"),
-    uniqueValidator = require('mongoose-unique-validator');
-
-const crypto = require('crypto');
+    crypto = require('crypto'),
+    uniqueValidate = require('mongoose-unique-validator');
 
 const UserSchema = mongoose.Schema({
     name: {
@@ -19,35 +18,38 @@ const UserSchema = mongoose.Schema({
         trim: true,
         index: true
     },
-    password: {
+    hashed_password: {
         type: String,
         required: true
     },
     salt: {
         type: String,
-        required: true
+        // required: true
     }
 }, 
     {timestamps: true}
 );
 
-UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
+//uniqueValidator
+UserSchema.plugin(uniqueValidate, { message: 'That {PATH} is already taken.' });
 
-UserSchema.virtual('password')
-  .set(function (password) {
+
+UserSchema.virtual('password').set(function(password) {
+    this._password = password;
     this.salt = crypto.randomBytes(32).toString('base64');
-    this.password = this.encryptPassword(password, this.salt);
-  })
-  .get(function () {
-    return this.password;
+    this.hashed_password = this.encryptPassword(password, this.salt);
+  }).get(function() {
+    return this._password;
   });
 
 UserSchema.methods.encryptPassword = function (password, salt) {
     return crypto.createHmac('sha1', salt).update(password).digest('hex');
 };
+
+
 UserSchema.methods.checkPassword = function (password) {
     return this.encryptPassword(password, this.salt) === this.password;
 };
 
 // export model user with UserSchema
-module.exports.userModel = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("userModel", UserSchema);

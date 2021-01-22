@@ -1,38 +1,33 @@
-const UserModel = require("../models/User");
+const userModel = require("../models/User");
 
 // User SignIn
-exports.signIn = (req, res) => {
-    // Validate request
-    if (!req.body.email || !req.body.password) {
-      res.status(400).send({ message: "field is required" });
-      return;
-    }
+exports.signIn = (req, res, next) => {
+    // // Validate request
+    // if (!req.body.email || !req.body.password) {
+    //   res.status(400).send({ message: "field is required" });
+    //   return;
+    // }
   
-    User.findOne({ email: req.body.email }, (err, user) => {
-      if (err) return res.status(500).send('Error on the server.');
-      if (!user) return res.status(404).send('No user found.');
+    // User.findOne({ email: req.body.email }, (err, user) => {
+    //   if (err) return res.status(500).send('Error on the server.');
+    //   if (!user) return res.status(404).send('No user found.');
   
-      var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-      if (!passwordIsValid) return res.status(401).send({ auth: false });
+    //   var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+    //   if (!passwordIsValid) return res.status(401).send({ auth: false });
   
-      res.status(200).send({ auth: true});
-    });
+    //   res.status(200).send({ auth: true});
+    // });
 };
-  
+
 // User SignUp
-exports.signUp = (req, res) => {
-    // Validate request
-    if (!req.body) {
-        res.status(400).send({ message: "content is required" });
-        return;
-    }
+exports.signUp = async (req, res, next) => {
 
-    let password = bcrypt.hashSync(req.body.password, 10);
-
-    User.create({
+    // let password = bcrypt.hashSync(req.body.password, 10);
+    
+    userModel.create({
         name: req.body.name,
         email: req.body.email,
-        password: password
+        password: req.body.password
     })
     .then(data => {
         res.status(200).send({ message: "User registration success" });
